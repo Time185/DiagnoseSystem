@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+	<constant name="struts.ognl.allowStaticMethodAccess" value="true"></constant>
+	<constant name="struts.multipart.maxSize" value="204800000"></constant>
+	<constant name="struts.decMode" value="true"></constant>
+	<!-- 通过包进行管理 -->
+	<!-- 首先配置包 -->
+	<package name="time" extends="struts-default" namespace="/">		
+		<action name="uploadZip" class="time.web.action.UploadAction" method="upload">
+			<param name="savePath">D:/upload</param>
+			<result name="input">/err.jsp</result>
+		</action>
+		
+		<action name="user_regist" class="time.web.action.UserAction" method="regist">
+			<result name="error">regist.jsp</result>
+			<result name="success">login.jsp</result>
+		</action>
+		<action name="user_login" class="time.web.action.UserAction" method="login">
+			<result name="success">../main/main.jsp</result>
+			<result name="error">login.jsp</result>
+		</action>
+		<action name="user_check" class="time.web.action.UserAction" method="check"></action>
+		
+		<action name="diagnose" class="time.web.action.DiagnoseAction" method="diagnose">
+			
+			<!-- pdf诊断报告模板 -->
+			<param name="templatePDF">F:\\大智慧辅助诊断模板.pdf</param>
+			<!-- 生成对应的诊断报告 -->
+			<param name="diagnoseResult">F:\\name.pdf</param>
+			<!-- 将算法标注后的某一张切片添加到诊断报告中  -->
+			<param name="image">F:\\01.jpg</param>
+			<result>/diagnose/result.jsp</result>
+		</action>
+		<action name="getResult" class="time.web.action.DiagnoseAction" method="getResult">
+			<!--用来获取pdf的根路径  后面一定要加/  -->
+			<param name="path">F:\\</param>
+		</action>	
+		
+		<action name="scanDCM" class="time.web.action.DiagnoseAction" method="scanDcm"></action>
+	</package>
+	
+</struts>

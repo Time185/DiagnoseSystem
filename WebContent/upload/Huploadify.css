@@ -1,0 +1,111 @@
+@charset "utf-8";
+/* CSS Document */
+.upload-button{
+	position: abstract;
+	font-size: 18px;
+    background:green;
+    border-radius: 3px;
+	border: 2px solid #c0c0c0; 
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+    line-height: 44px;
+    padding: 0 30px;
+    color: #fff;
+    display: inline-block;
+    margin: 20px auto;
+    margin-right: 20px;
+    margin-left: 20px;
+    cursor: pointer;
+    font-family: '微软雅黑' ;
+    display：block;
+}
+
+.upload-button:hover{
+	background-color: #888;
+}
+
+.uploadify-button{
+	font-size: 18px;
+    background:green;
+    border-radius: 3px;
+	border: 2px solid #c0c0c0; 
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+    line-height: 44px;
+    padding: 0 30px;
+    color: #fff;
+    display: inline-block;
+    margin: 20px auto;
+    cursor: pointer;
+    font-family: '微软雅黑';
+	text-decoration:none;
+	display:none;
+}
+.uploadify-button:hover{
+	background-color: #888;
+}
+.uploadfile{
+	width:10px;
+	}
+
+.uploadify-queue {
+	margin-bottom: 5em;
+}
+.uploadify-queue-item {
+	background-color: #F5F5F5;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	font: 14px Verdana, Geneva, sans-serif;
+	color:#666666;
+	margin-top: 8px;
+	max-width: 650px;
+	padding: 10px;	
+	margin:1vh auto;
+}
+.uploadbtn,.delfilebtn{
+	display:inline-block;
+	border:1px solid #999;
+	line-height:24px;
+	border-radius:4px;
+	padding:0 18px;
+    font-size:12px;
+	color:#666;
+	text-decoration:none;
+	}
+.uploadbtn{
+	display: none;/*默认不显示上传按钮，非自动上传时用js控制显示*/
+}
+.disabledbtn{
+
+}
+.up_filename{
+	font-size:16px;
+	height:10px;
+	text-align:middle;	
+}
+.up_percent{
+	font-size:12px;
+	color:green;
+	margin-left:480px;
+}
+.progressnum,.delfilebtn,.uploadbtn{
+	font-size:12px;
+	color:#666;
+	margin-left:15px;
+	}
+
+.uploadify-progress{
+	 display:inline-block; 
+	 width:650px; 
+	 height:5px; 
+	 background-color:white;
+	 border-radius:20px;
+	 border:1px groove #666;
+	 vertical-align:middle;
+	 padding:0;
+	 }
+.uploadify-progress-bar{
+	width:0;
+	height:100%;
+	border-radius:20px;
+	background-color: green;
+	}
