@@ -29,6 +29,9 @@ import time.utils.copyFileUtil;
 
 public class UploadServiceImp implements UploadService {
 	private String userDir = "D:\\upload";
+	private String python = "python";
+	private String dicm2jpgCodePath = "D:\\Program Files\\python37\\Dicom2Jpg\\demo.py";
+
 	@Override
 	public String upload(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		// TODO Auto-generated method stub
@@ -154,5 +157,25 @@ public class UploadServiceImp implements UploadService {
 			}
 		}
 		System.out.println("文件夹共有:" + folderNum + ",文件共有:" + fileNum);
+	}
+
+	@Override
+	public void dcm2jpg(String dcmDir, String jpgDir) {
+		// TODO Auto-generated method stub
+		File jpgdir = new File(jpgDir);
+		if(!jpgdir.exists()) {
+			jpgdir.mkdirs();
+		}
+		try {
+			String[] arg = new String[] {"python","D:\\Program Files\\python37\\Dicom2Jpg\\demo.py",
+					dcmDir,
+					jpgDir};
+			Process proc = Runtime.getRuntime().exec(arg);
+			proc.waitFor();
+			System.out.println("转换完成");
+		}catch(Exception e) {
+			e.printStackTrace();
+			System.out.println("dcm2jpg ERROR");
+		}
 	}
 }

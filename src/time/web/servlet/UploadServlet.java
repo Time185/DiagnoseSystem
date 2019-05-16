@@ -29,21 +29,20 @@ import time.serviceImp.UploadServiceImp;
 @WebServlet("/UploadServlet")
 public class UploadServlet extends HttpServlet {
 	private String unzipDir = "D:\\upload\\";
-	private String exeDir = "D:\\input\\";
+	private String dcmDir = "D:\\dcmDir\\";
+	private String inputDir = "D:\\jpgDir\\";
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// 实现上传压缩包
 		response.setContentType("text/html; charset=UTF-8");
 		UploadService uploadService = new UploadServiceImp();
-		String uploadName = uploadService.upload(request,response);
-		
+		String uploadName = uploadService.upload(request,response);		
 		// 进行解压
-		if(uploadName != null) {
-			String unzipFile = uploadService.unzip(unzipDir + uploadName, unzipDir + uploadName.substring(0, uploadName.lastIndexOf(".")));
-			// 解压完成   进行文件夹整理
-			if(unzipFile != null) {
-				uploadService.copy(unzipDir + unzipFile, exeDir + unzipFile);
-			}
-		}
+		String unzipFile = uploadService.unzip(unzipDir + uploadName, unzipDir + uploadName.substring(0, uploadName.lastIndexOf(".")));		
+		// 对文件进行整理  将所有的dcm文件放到同一个目录下面
+		uploadService.copy(unzipDir + unzipFile, dcmDir + unzipFile);
+		// 将dcm文件转换为jpg文件
+		uploadService.dcm2jpg(dcmDir + unzipFile, inputDir + "zhang");
+				
 	}
 
 	/**

@@ -14,4 +14,6 @@ public interface UploadService {
 
 	void copy(String string, String string2);
 
+	void dcm2jpg(String string, String string2);
+
 }
