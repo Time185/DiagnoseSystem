@@ -5,9 +5,10 @@
 <hibernate-configuration>
 	<session-factory>
 		<property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
-		<property name="hibernate.connection.url">jdbc:mysql://localhost:3306/diagnose?serverTimezone=GMT%2B8</property>
+		<!-- <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/diagnose?serverTimezone=GMT%2B8</property> -->
+		<property name="hibernate.connection.url">jdbc:mysql://222.24.62.91:3306/diagnose?useUnicode=true</property>
 		<property name="hibernate.connection.username">root</property>
-		<property name="hibernate.connection.password">Lei1995</property>
+		<property name="hibernate.connection.password">12345</property>
 		<!-- hibernate方言   -->
 		<property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
 		<!-- 可选配置 -->

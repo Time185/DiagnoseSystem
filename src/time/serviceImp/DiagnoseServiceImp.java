@@ -10,10 +10,20 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.Normalizer.Form;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.struts2.ServletActionContext;
+
+import com.google.gson.JsonIOException;
+import com.google.gson.JsonSyntaxException;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Image;
@@ -25,16 +35,23 @@ import com.itextpdf.text.pdf.PdfImportedPage;
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfStamper;
 
+import time.domain.User;
 import time.service.DiagnoseService;
+import time.utils.ReadJson;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONException;
+import net.sf.json.JSONObject;
+
 
 public class DiagnoseServiceImp implements DiagnoseService {
 
 	@Override
-	public void producePDF(String templatePath, String newPDFPath, String imagePath) {		
+	public void producePDF(String templatePath, String result, String[] imagePath, User user) {		
 		PdfReader reader;
 		FileOutputStream out;
 		ByteArrayOutputStream bos;
 		PdfStamper stamper;
+		String newPDFPath = result + "/" + user.getLoginname() + ".pdf"; 
 		try {
 			out = new FileOutputStream(newPDFPath);
 			reader = new PdfReader(templatePath);
@@ -42,7 +59,7 @@ public class DiagnoseServiceImp implements DiagnoseService {
 			stamper = new PdfStamper(reader, bos);
 			AcroFields form = stamper.getAcroFields();
 			//form.addSubstitutionFont(BaseFont.createFont("STSong-light","UniGB-UCS2-H",BaseFont.NOT_EMBEDDED));
-			String[] str = {"李四","24","20190426","正常","健康"};
+			String[] str = {user.getName(),String.valueOf(user.getAge()),"20190426","正常","健康"};
 			int i = 0;
 			Iterator<String> it =  form.getFields().keySet().iterator();
 			
@@ -54,7 +71,7 @@ public class DiagnoseServiceImp implements DiagnoseService {
 					float x = sign.getLeft();
 					float y = sign.getBottom();
 					// 读图片
-					Image image = Image.getInstance(imagePath);
+					Image image = Image.getInstance( result + "/"+ imagePath[0]);
 					// 获取操作界面
 					PdfContentByte under = stamper.getOverContent(pageNo);
 					// 根据域的大小缩放图片
@@ -87,17 +104,34 @@ public class DiagnoseServiceImp implements DiagnoseService {
 	}
 	// 调用服务器算法  
 	@Override
-	public boolean diagnose() {
+	public String diagnose(String jpgDir,String resultDir) {
 		// TODO Auto-generated method stub
-		String message = "sudo /data/tanjiale/py-faster-rcnn/tools/demo.py --net resnet101";
+		File result = new File(resultDir);
+		if(!result.exists())
+			result.mkdirs();
+		String arg = "sudo /data/tanjiale/py-faster-rcnn/tools/demo.py"
+				 + " " + jpgDir + " " + resultDir;
+		byte[] buffer = new byte[1024];
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		ByteArrayOutputStream outErr = new ByteArrayOutputStream();
 		try {
-			Process proc = Runtime.getRuntime().exec(message);
-			return true;
-		} catch (IOException e) {
+			Process proc = Runtime.getRuntime().exec(arg);
+			InputStream errStream = proc.getErrorStream();
+			InputStream stream = proc.getInputStream();
+			int len = -1;
+			while((len = errStream.read(buffer))!= -1) {
+				outErr.write(buffer, 0, len);
+			}
+			while((len = stream.read(buffer))!= -1) {
+				outErr.write(buffer, 0, len);
+			}
+			proc.waitFor();
+			return resultDir;
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return false;
+		return null;
 	}
 	@Override
 	public boolean getPDF(String string, HttpServletResponse response) {
@@ -120,6 +154,111 @@ public class DiagnoseServiceImp implements DiagnoseService {
 		}
 		return false;
 	}
+	@Override
+	public String[] getImagePath(String result) {
+		// TODO Auto-generated method stub
+		String[] imagePath = new String[3];
+		try {
+			String jsonArray = ReadJson.ReadFile(result + "/pred_result.json");
+			JSONArray jsonArray1=JSONArray.fromObject(jsonArraySort(jsonArray));////按value排序后的json
+			for(int i = 0; i < jsonArray1.size() ; i++){
+        		JSONObject itemcoord = jsonArray1.getJSONObject(i);
+        		        		
+        	}
+			for(int i = 0; i < 3 ; i++){
+        		JSONObject itemcoord = jsonArray1.getJSONObject(i);
+        		System.out.println(itemcoord.get("picture")); 
+        		if(itemcoord.get("picture") != null) {
+        			
+        			imagePath[i] = (String) itemcoord.get("picture");
+        		}else{
+        			
+        			imagePath[i] = null;
+        		}
+			}	
+        	}catch(JsonIOException e) {
+        		e.printStackTrace();
+        	}catch(JsonSyntaxException e) {
+	            e.printStackTrace();
+	        }
+		return imagePath;
+	}
 	
+	public String jsonArraySort(String jsonArrStr) {
+		JSONArray jsonArr = JSONArray.fromObject(jsonArrStr);
+		JSONArray sortedJsonArray = new JSONArray();
+		ArrayList<JSONObject> jsonValues = new ArrayList<JSONObject>();
+		for (int i = 0; i < jsonArr.size(); i++) {
+			jsonValues.add(jsonArr.getJSONObject(i));
+		}
+		Collections.sort(jsonValues, new Comparator<JSONObject>() {
+			private  String KEY_NAME = "value";
+
+			@Override
+			public int compare(JSONObject a, JSONObject b) {
+				String valA = new String();
+				String valB = new String();
+				try {
+					// // 这里是a、b需要处理的业务，需要根据你的规则进行修改。
+					String aStr = a.getString(KEY_NAME);
+					valA = aStr.replaceAll("-", "");
+					String bStr = b.getString(KEY_NAME);
+					valB = bStr.replaceAll("-", "");
+				} catch (JSONException e) {
+				}
+				return -valA.compareTo(valB);			
+			}
+		});
+		
+		for (int i = 0; i < jsonArr.size(); i++) {
+			sortedJsonArray.add(jsonValues.get(i));
+		}
+		return sortedJsonArray.toString();
+	}
+	@Override
+	public void scanDcm(String resultDir ,HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		response.setContentType("text/html; charset=utf-8");
+		System.out.println("进入picture()");
+		
+		//String path ="C:\\Users\\XAYY\\Desktop\\1";  
+
+		
+		
+		File file = new File(resultDir);
+		
+		ArrayList<String> urlList = new ArrayList<>();
+		
+		if (file.exists()) {
+			File[] pictureList = file.listFiles();
+			if(pictureList.length ==0) {
+				System.out.println("错误，文件夹内没有文件");
+			}
+			else {
+				for (int i = 0; i < pictureList.length; i++) {
+					String pictureName = pictureList[i].getName();	
+					System.out.println("pictureName = "+ pictureName);
+					String extension = "";
+					int j = pictureName.lastIndexOf('.');
+					if (j > 0) {
+					    extension = pictureName.substring(j+1);
+					    System.out.println("extension = "+ extension);
+						if("jpg".equals(extension) || "png".equals(extension)){
+							System.out.println(pictureName);
+							//	String url = "images/gallery/" + pictureName;
+							urlList.add(pictureName);
+						}
+					}else {
+						System.out.println("不能得到文件的扩展名");
+					}
+				}
+			}
+		}	
+		System.out.println("picture()中urlList.size() = " + urlList.size());
+		request.setAttribute("url", urlList);
+		RequestDispatcher requestDispatcher = request.getRequestDispatcher("../diagnose/picture.jsp");
+		requestDispatcher.forward(request, response);
+		
+	}
 
 }

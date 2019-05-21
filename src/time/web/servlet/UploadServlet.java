@@ -20,6 +20,7 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.fileupload.util.Streams;
 
+import time.domain.User;
 import time.service.UploadService;
 import time.serviceImp.UploadServiceImp;
 
@@ -28,12 +29,16 @@ import time.serviceImp.UploadServiceImp;
  */
 @WebServlet("/UploadServlet")
 public class UploadServlet extends HttpServlet {
-	private String unzipDir = "D:\\upload\\";
-	private String dcmDir = "D:\\dcmDir\\";
-	private String inputDir = "D:\\jpgDir\\";
+	//private String unzipDir = "D:\\upload\\";
+	private String unzipDir = "/data/leichao/diagnose/upload/";
+	//private String dcmDir = "D:\\dcmDir\\";
+	private String dcmDir = "/data/leichao/diagnose/dcmDir/";
+	//private String inputDir = "D:\\jpgDir\\";
+	private String inputDir = "/data/leichao/diagnose/jpgDir/";
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// 实现上传压缩包
 		response.setContentType("text/html; charset=UTF-8");
+		User user = (User) request.getSession().getAttribute("user");
 		UploadService uploadService = new UploadServiceImp();
 		String uploadName = uploadService.upload(request,response);		
 		// 进行解压
@@ -41,7 +46,7 @@ public class UploadServlet extends HttpServlet {
 		// 对文件进行整理  将所有的dcm文件放到同一个目录下面
 		uploadService.copy(unzipDir + unzipFile, dcmDir + unzipFile);
 		// 将dcm文件转换为jpg文件
-		uploadService.dcm2jpg(dcmDir + unzipFile, inputDir + "zhang");
+		uploadService.dcm2jpg(dcmDir + unzipFile, inputDir + user.getLoginname());
 				
 	}
 

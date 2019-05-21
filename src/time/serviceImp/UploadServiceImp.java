@@ -28,9 +28,8 @@ import time.service.UploadService;
 import time.utils.copyFileUtil;
 
 public class UploadServiceImp implements UploadService {
-	private String userDir = "D:\\upload";
-	private String python = "python";
-	private String dicm2jpgCodePath = "D:\\Program Files\\python37\\Dicom2Jpg\\demo.py";
+	private String userDir = "/data/leichao/diagnose/upload";
+	
 
 	@Override
 	public String upload(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -167,9 +166,13 @@ public class UploadServiceImp implements UploadService {
 			jpgdir.mkdirs();
 		}
 		try {
-			String[] arg = new String[] {"python","D:\\Program Files\\python37\\Dicom2Jpg\\demo.py",
+			/*String[] arg = new String[] {"python","D:\\Program Files\\python37\\Dicom2Jpg\\demo.py",
+					dcmDir,
+					jpgDir};*/
+			String[] arg = new String[] {"python3","/data/leichao/diagnose/pythonCode/dcm2jpg.py",
 					dcmDir,
 					jpgDir};
+		
 			Process proc = Runtime.getRuntime().exec(arg);
 			proc.waitFor();
 			System.out.println("转换完成");

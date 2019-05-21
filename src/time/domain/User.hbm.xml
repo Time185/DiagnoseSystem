@@ -16,6 +16,7 @@
 		<property name="email" column="email"></property>
 		<property name="phone" column="phone"></property>
 		<property name="num" column="num"></property>
+		<property name="age" column="age"></property>
 		<property name="status" column="status"></property>	
 	</class>
 </hibernate-mapping>

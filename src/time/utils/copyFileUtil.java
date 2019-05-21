@@ -14,7 +14,8 @@ public class copyFileUtil {
 	
 	public static void copyFile(String srcPathStr, String desPathStr) {
         //1.获取源文件的名称
-        String newFileName = srcPathStr.substring(srcPathStr.lastIndexOf("\\")+1); //目标文件地址
+       /* String newFileName = srcPathStr.substring(srcPathStr.lastIndexOf("\\")+1); //目标文件地址  window*/     
+		String newFileName = srcPathStr.substring(srcPathStr.lastIndexOf("/")+1); //目标文件地址  linux
         //System.out.println(newFileName);
         desPathStr = desPathStr + File.separator + newFileName; //源文件地址
         //System.out.println(desPathStr);

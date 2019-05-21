@@ -10,7 +10,15 @@ public class User {
 	private String email;
 	private String phone;
 	private int status;
+	private int age;
 	private int num;
+	
+	public int getAge() {
+		return age;
+	}
+	public void setAge(int age) {
+		this.age = age;
+	}
 	public int getNum() {
 		return num;
 	}

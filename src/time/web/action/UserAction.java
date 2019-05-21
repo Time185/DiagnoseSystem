@@ -73,6 +73,7 @@ public class UserAction extends ActionSupport{
 		UserService userService = new UserServiceImp();
 		User user = userService.login(loginname,password);
 		if(user.getLoginname() != null && user.getNum() <= 2) {
+			request.getSession().setAttribute("user", user);
 			return SUCCESS;
 		}else if(user.getNum() > 2) {
 			request.setAttribute("errorMsg","当前账户使用次数已到，请重新注册");

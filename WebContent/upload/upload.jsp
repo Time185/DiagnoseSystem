@@ -72,7 +72,7 @@
     		showUploadedPercent:true,
     		showUploadedSize:true,
     		removeTimeout:10000000,
-    		uploader:"http://localhost:8080/SH/UploadServlet",
+    		uploader:"http://222.24.62.91:8090/SH/UploadServlet",
     		onUploadStart:function(file){
     			console.log(file.name+'开始上传');
     		},

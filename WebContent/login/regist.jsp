@@ -15,6 +15,7 @@
 <s:form action="user_regist.action" theme="simple" onsubmit="return checkForm()" >
 	
 	姓名:<s:textfield name="user.name" id="name" onblur="checkUsername()" ></s:textfield><span id="span01" style="color:red"></span><br>
+	年龄:<s:textfield name="user.age" id="age"></s:textfield><br>
 	账号:<s:textfield name="user.loginname" id="loginname" onblur="checkname()"></s:textfield><span id="span02" style="color:red"></span><br><span id="span02"></span>
 	密码:<s:password name="user.password" id="password" onblur="checkPassword()"></s:password><span id="span03" style="color:red"></span><br>
 	邮箱:<s:textfield name="user.email" id="email" onblur="checkEmail()" ></s:textfield><span id="span04" style="color:red"></span><br>

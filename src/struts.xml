@@ -10,7 +10,8 @@
 	<!-- 首先配置包 -->
 	<package name="time" extends="struts-default" namespace="/">		
 		<action name="uploadZip" class="time.web.action.UploadAction" method="upload">
-			<param name="savePath">D:/upload</param>
+			<!-- <param name="savePath">D:/upload</param> -->
+			<param name="savePath">/data/leichao/diagnose/upload</param>
 			<result name="input">/err.jsp</result>
 		</action>
 		
@@ -25,21 +26,22 @@
 		<action name="user_check" class="time.web.action.UserAction" method="check"></action>
 		
 		<action name="diagnose" class="time.web.action.DiagnoseAction" method="diagnose">
-			
-			<!-- pdf诊断报告模板 -->
-			<param name="templatePDF">F:\\大智慧辅助诊断模板.pdf</param>
-			<!-- 生成对应的诊断报告 -->
-			<param name="diagnoseResult">F:\\name.pdf</param>
-			<!-- 将算法标注后的某一张切片添加到诊断报告中  -->
-			<param name="image">F:\\01.jpg</param>
+			<param name="jpgDir">/data/leichao/diagnose/jpgDir/</param>
+			<param name="resultDir">/data/leichao/diagnose/result/</param>
+			<param name="templatePDF">/data/leichao/diagnose/result/model.pdf</param>
 			<result>/diagnose/result.jsp</result>
 		</action>
 		<action name="getResult" class="time.web.action.DiagnoseAction" method="getResult">
 			<!--用来获取pdf的根路径  后面一定要加/  -->
-			<param name="path">F:\\</param>
+			<!-- <param name="path">F:\\</param> -->
+			<param name="path">/data/leichao/diagnose/result/</param>
 		</action>	
 		
-		<action name="scanDCM" class="time.web.action.DiagnoseAction" method="scanDcm"></action>
+		<action name="scanDCM" class="time.web.action.DiagnoseAction" method="scanDcm">
+			<param name="resultDir">/data/leichao/diagnose/result/</param>
+		</action>
+		<action name="pictureTransport" class="time.web.action.DiagnoseAction" method="pictureTransport">		
+		</action>
 	</package>
 	
 </struts>

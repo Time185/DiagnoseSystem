@@ -7,8 +7,8 @@
 <title>诊断结果</title>
 </head>
 <body>
-<a href="getResult.action?result=name.pdf">获取诊断报告</a><br>
+<a href="getResult.action">获取诊断报告</a><br>
 <a href="scanDCM.action">浏览标注切片</a><br>
-<a href="getResult.action?result=name.zip">获取诊断文件</a>
+<a href="getResult.action">获取诊断文件</a>
 </body>
 </html>
