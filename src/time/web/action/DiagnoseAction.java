@@ -3,21 +3,30 @@ package time.web.action;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Map;
 
 import javax.servlet.ServletException;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.struts2.ServletActionContext;
+import org.apache.struts2.interceptor.ServletRequestAware;
+import org.apache.struts2.interceptor.ServletResponseAware;
+
 
 import com.itextpdf.text.DocumentException;
+import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 
 import time.domain.User;
 import time.service.DiagnoseService;
 import time.serviceImp.DiagnoseServiceImp;
 
-public class DiagnoseAction extends ActionSupport{
+public class DiagnoseAction extends ActionSupport implements ServletRequestAware,ServletResponseAware{
+	
+	private HttpServletRequest request;
+	private HttpServletResponse response;
 	
 	private String path;
 	// pdf模板
@@ -58,11 +67,11 @@ public class DiagnoseAction extends ActionSupport{
 	}
 	public void setImage(String image) {
 		this.image = image;
-	}
+	}	
 	
 	public String diagnose() throws DocumentException, IOException {
 		DiagnoseService diagnose = new DiagnoseServiceImp();
-		User user = (User) ServletActionContext.getRequest().getSession().getAttribute("user");
+		User user = (User) request.getSession().getAttribute("user");
 		// 判断后台算法是否调用成功
 		String jpgDir = getJpgDir() + user.getLoginname();
 		String resultDir = getResultDir() + user.getLoginname();
@@ -78,8 +87,6 @@ public class DiagnoseAction extends ActionSupport{
 		return SUCCESS;
 	}
 	public String getResult() {
-		HttpServletRequest request = ServletActionContext.getRequest();
-		HttpServletResponse response = ServletActionContext.getResponse();
 		User user = (User) request.getSession().getAttribute("user");
 		String pdfName = user.getLoginname() + "/" + user.getLoginname() + ".pdf";
 		response.setContentType(ServletActionContext.getServletContext().getMimeType(pdfName));		
@@ -89,18 +96,14 @@ public class DiagnoseAction extends ActionSupport{
 		return null;
 	}
 	
-	public String scanDcm() throws ServletException, IOException {
-		HttpServletResponse response = ServletActionContext.getResponse();
-		HttpServletRequest request = ServletActionContext.getRequest();
-		User user = (User) ServletActionContext.getRequest().getSession().getAttribute("user");
+	public String scanDcm() throws ServletException, IOException {	
+		User user = (User) request.getSession().getAttribute("user");
 		String resultDir = "/data/leichao/diagnose/result/" + user.getLoginname();
 		DiagnoseService diagnose = new DiagnoseServiceImp();
 		diagnose.scanDcm(resultDir,request,response);
 		return null;
 	}
 	public String pictureTransport() throws IOException {
-		HttpServletRequest request = ServletActionContext.getRequest();
-		HttpServletResponse response =  ServletActionContext.getResponse();
 		User user = (User) request.getSession().getAttribute("user");
 		String pictureName = request.getParameter("name");
 		
@@ -117,5 +120,16 @@ public class DiagnoseAction extends ActionSupport{
 		outputStream.close();
 		fileInputStream.close();
 		return null;
+	}
+	
+	@Override
+	public void setServletResponse(HttpServletResponse response) {
+		// TODO Auto-generated method stub
+		this.response = response;
+	}
+	@Override
+	public void setServletRequest(HttpServletRequest request) {
+		// TODO Auto-generated method stub
+		this.request = request;
 	}
 }

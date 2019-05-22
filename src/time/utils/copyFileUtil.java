@@ -7,10 +7,6 @@ import java.io.IOException;
 
 public class copyFileUtil {
 
-	public static void main(String[] args) throws IOException {
-		//String path = "D:\\upload\\qmy";
-		//traverseFolder(path);
-	}
 	
 	public static void copyFile(String srcPathStr, String desPathStr) {
         //1.获取源文件的名称

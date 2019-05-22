@@ -26,10 +26,16 @@
 		<action name="user_check" class="time.web.action.UserAction" method="check"></action>
 		
 		<action name="diagnose" class="time.web.action.DiagnoseAction" method="diagnose">
+			 <interceptor-ref name="defaultStack"></interceptor-ref>
+			<interceptor-ref name="execAndWait">
+				<param name="delay">500</param>
+			</interceptor-ref> 
 			<param name="jpgDir">/data/leichao/diagnose/jpgDir/</param>
 			<param name="resultDir">/data/leichao/diagnose/result/</param>
 			<param name="templatePDF">/data/leichao/diagnose/result/model.pdf</param>
-			<result>/diagnose/result.jsp</result>
+			
+			<result name="wait">/upload/wait.jsp</result>
+			<result name="success">/diagnose/result.jsp</result>
 		</action>
 		<action name="getResult" class="time.web.action.DiagnoseAction" method="getResult">
 			<!--用来获取pdf的根路径  后面一定要加/  -->

@@ -39,6 +39,7 @@ public class UploadServlet extends HttpServlet {
 		// 实现上传压缩包
 		response.setContentType("text/html; charset=UTF-8");
 		User user = (User) request.getSession().getAttribute("user");
+		request.getSession().setAttribute("user", user);
 		UploadService uploadService = new UploadServiceImp();
 		String uploadName = uploadService.upload(request,response);		
 		// 进行解压

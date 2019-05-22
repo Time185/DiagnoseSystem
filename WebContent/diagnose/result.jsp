@@ -8,7 +8,7 @@
 </head>
 <body>
 <a href="getResult.action">获取诊断报告</a><br>
-<a href="scanDCM.action">浏览标注切片</a><br>
+<a href="scanDCM.action" target="_blank">浏览标注切片</a><br>
 <a href="getResult.action">获取诊断文件</a>
 </body>
 </html>

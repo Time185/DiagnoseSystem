@@ -241,9 +241,12 @@
 					
 					var files = e.target.files;
 					var fileError = new Array();
+					var f1 = new Array();
 					var patientName;
 			  		var $result = $("#result");
 			  		var j = 1;
+			  		var flag = 0
+			  		var flag1=0
 					$result.html("");
 					$("#result_block").removeClass("hidden").addClass("show");
 			  		for(var i = 0 ,j=1; i < files.length; i++,j++){
@@ -254,21 +257,42 @@
 						$result.append($fileContent);
 						JSZip.loadAsync(files[i]).then(function(zip){
 							zip.forEach(function (relativePath, zipEntry){
-								// 对文件路径进行切割
+								// 对文件路径进行切割 
 								var array = zipEntry.name.split('/');
+								
 								var arrayLen = 0;
 								for(var i in array){
 									arrayLen++;
+                                    console.log(array[i])
 								}
-								//
 								
-								if(arrayLen == 2 || arrayLen == 3){
-							           // 用来判断患者名称是否含有_
-										if(!(/_/.test(array[0]))){
-												// 这里用来检查二级目录是否为文件夹
+								if(( /^[0-9a-zA-Z]+$/.test(array[0]))){
+								    if(arrayLen == 2 || arrayLen == 3){
+									
+									 // 用来判断患者名称是否含有_
+										//用来判断压缩包中是否有多个文件
+									  
+									    if(!(/_/.test(array[0]))){
+												//用来判断压缩包中是否有多个文件 
 												if(arrayLen == 2){
+													if (flag==0){
+														   flag1=array[0]
+															flag=flag+1
+															console.log("------")
+														}else{
+															if (array[0]==flag1){
+																
+																
+															}else{
+																//console.log("重复"+array[0]+"-----"+flag1)
+																$fileContent.append("<p style='color:red'>" +zipEntry.name + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"' + array[arrayLen-1] +'"压缩包中不能含有两个病人的文件夹！' + "</p>");
+											            		fileError.push("压缩包中不能含有多个病人的文件夹！");
+															}
+														}
+				
 													// 判断二级目录为文件夹，而不是文件    	           		
 									            	if(!((/\./).test(array[arrayLen-1]))){
+									            		
 									            		// 这里准备用一级文件夹   用来判断重名 
 									            		//var patientNameArray = a.split(" ");
 									            		//for (var i = 0; i < patientNameArray.length; i++){
@@ -294,6 +318,7 @@
 									            		fileError.push("\n " + zipEntry.name + ' " ' + array[arrayLen-2]+ ' " ' +"中含有中文名称，请修改后上传！");
 									            	// 判断二级目录中含有文件，二级目录必须全部为文件夹
 									            	}else if(arrayLen == 3 && (/\./).test(array[arrayLen-2])){
+									            		
 									            		$fileContent.append("<p style='color:red'>" +zipEntry.name + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"' + array[arrayLen-2] +'"不是文件夹，请删除后上传！' + "</p>");
 									            		fileError.push("\n " + zipEntry.name +' " ' + array[arrayLen-2] +' " ' + "不是文件夹，请删除后上传");
 									            	}
@@ -317,20 +342,30 @@
 							           fileError.push("\n " + zipEntry.name + "文件目录结构不符合要求！");
 							            	
 							            }
+							}else{
+								f1.push("文件一级目录中不能含有含有中文名称，请修改后上传！");
+					            
+							}
 							            });	
 							
-								if(fileError.length == 0){
+								if(fileError.length == 0&&f1.length == 0){
 										alert("上传文件检查合格，请点击上传文件。");
 										$(".delfilebtn").prop('class','upload');
 								}else{
 										$(".delfilebtn").prop('class','unupload');
-										alert(fileError);
+										if (fileError.length == 0){}
+										else{alert(fileError);}
+									
+										if (f1.length == 0){}
+											
+										else
+										{alert("文件一级目录中不能含有含有中文名称，请修改后上传！")}
+										
 										$(".unupload").click();
-										
-						
-										
+									
 								}
 							    fileError = [];
+							    
 							//
 								
 								/* $fileContent.append($("<li>", {text : zipEntry.name})); */
