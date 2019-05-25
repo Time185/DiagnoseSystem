@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+	<constant name="struts.ognl.allowStaticMethodAccess" value="true"></constant>
+	<constant name="struts.multipart.maxSize" value="204800000"></constant>
+	<constant name="struts.decMode" value="true"></constant>
+	<!-- 通过包进行管理 -->
+	<!-- 首先配置包 -->
+	<package name="time" extends="struts-default" namespace="/">		
+		<action name="uploadZip" class="time.web.action.UploadAction" method="upload">
+			<!-- <param name="savePath">D:/upload</param> -->
+			<param name="savePath">/data/leichao/diagnose/upload</param>
+			<result name="input">/err.jsp</result>
+		</action>
+		
+		<action name="user_regist" class="time.web.action.UserAction" method="regist">
+			<result name="error">regist.jsp</result>
+			<result name="success">login.jsp</result>
+		</action>
+		<action name="user_login" class="time.web.action.UserAction" method="login">
+			<result name="success">../main/main.jsp</result>
+			<result name="error">login.jsp</result>
+		</action>
+		<action name="user_check" class="time.web.action.UserAction" method="check"></action>
+		
+		<action name="diagnose" class="time.web.action.DiagnoseAction" method="diagnose">
+			 <interceptor-ref name="defaultStack"></interceptor-ref>
+			<interceptor-ref name="execAndWait">
+				<param name="delay">500</param>
+			</interceptor-ref> 
+			<param name="jpgDir">/data/leichao/diagnose/jpgDir/</param>
+			<param name="resultDir">/data/leichao/diagnose/result/</param>
+			<param name="templatePDF">/data/leichao/diagnose/result/model.pdf</param>
+			
+			<result name="wait">/upload/wait.jsp</result>
+			<result name="success">/diagnose/result.jsp</result>
+		</action>
+		<action name="getResult" class="time.web.action.DiagnoseAction" method="getResult">
+			<!--用来获取pdf的根路径  后面一定要加/  -->
+			<!-- <param name="path">F:\\</param> -->
+			<param name="path">/data/leichao/diagnose/result/</param>
+		</action>	
+		
+		<action name="scanDCM" class="time.web.action.DiagnoseAction" method="scanDcm">
+			<param name="resultDir">/data/leichao/diagnose/result/</param>
+		</action>
+		<action name="pictureTransport" class="time.web.action.DiagnoseAction" method="pictureTransport">		
+		</action>
+	</package>
+	
+</struts>

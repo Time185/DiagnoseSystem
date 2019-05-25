@@ -24,6 +24,7 @@
         }
 </style>
 <title>登录</title>
+<link href="./image/login.css" type="text/css" rel="stylesheet"/>
 <script>
 function inputNull(form)
 {
@@ -58,16 +59,46 @@ function inputNull(form)
 				errorMsg = "";
 			}
 			%>
-<body>
-	<form action="user_login.action" method="post" onSubmit="return inputNull(this)">
-		<table>
-<!--  		<caption>登录</caption> -->
-			<tr><td>用户名</td><td><input type="text" name="loginname"></td></tr>
-			<tr><td>密码</td><td><input type="password" name="password" ></td></tr>
-			<tr><td>用户类型</td><td><input type="radio" name="status" value="0" >患者<input type="radio" name="status" value="1" >医生</td><td id="error" ></td></tr>
-			<tr><td><input type="submit" value="登录"></td><td><span style="color:rgb(255,0,0)"><%=errorMsg %></span><span style="color:rgb(255,0,0)"><%=errorMsg0 %></span>
-			</td></tr>			
-		</table>
-	</form>
+<body background="./image/bglogin.jpg">
+	<div  class="main1" id="main">
+        <div class="login1">
+	      <div class="login2">
+			<div class="loginTopDiv">
+              <span class="loginTop">会员登录</span>
+            </div>
+            <hr class="thickLine" noshade="noshade">
+            <hr class="thinLine" >
+            <div>
+		<form action="user_login.action" method="post" name="form" onSubmit="return inputNull(this)">
+			<table>
+		
+				<tr><td>用户名</td><td><input class="userInput" type="text" name="loginname"></td></tr>
+				<tr>
+                 	 <td height="20">&nbsp;</td>
+                  	<td></td>
+           	 	</tr>
+				<tr><td>密码</td><td><input class="passwordInput" type="password" name="password" ></td></tr>
+					<tr>
+                	  	<td height="20">&nbsp;</td>
+                  		<td></td>
+            		</tr>
+					<tr><td>&nbsp;&nbsp;用户类型</td><td><input type="radio" name="status" value="0" >患者&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name="status" value="1" >医生</td><td id="error" ></td></tr>
+			</table>		
+			<div>
+					<div style="margin-top:14px;height:41px;width:105px;float:left;margin-left:55px;margin-right:25px"><input type="submit" value="登录" style="width:105px" class="button_blue"></div>
+					<div style="margin-top:14px;height:41px;width:105px;float:left"><input type="button" name="regist" value="注册" onclick="regist()" style="width:105px" class="button_blue"></div>
+			</div>				
+		</form>
+		</div>
+		</div>
+        </div>
+       </div>
+<script type="text/javascript">
+	function regist() {
+		document.form.action="user_regist.action";
+		document.form.submit();
+		
+	}
+</script>
 </body>
 </html>

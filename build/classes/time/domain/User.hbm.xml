@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 建立类和表的映射 -->
+	<class name="time.domain.User" table="diagnose_user">
+		<!-- 建立类中的属性与表中的主键对应 -->
+		<id name="uid" column="uid">
+			<generator class="native"/>
+		</id>
+		<!-- 建立类中属性与字段的对应 -->
+		<property name="loginname" column="loginname" unique-key="ture"></property>
+		<property name="password" column="password"></property>
+		<property name="name" column="name"></property>
+		<property name="email" column="email"></property>
+		<property name="phone" column="phone"></property>
+		<property name="num" column="num"></property>
+		<property name="age" column="age"></property>
+		<property name="status" column="status"></property>	
+	</class>
+</hibernate-mapping>

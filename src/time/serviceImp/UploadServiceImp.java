@@ -25,6 +25,7 @@ import org.apache.tools.zip.ZipEntry;
 import org.apache.tools.zip.ZipFile;
 
 import time.service.UploadService;
+import time.utils.FileUtils;
 import time.utils.copyFileUtil;
 
 public class UploadServiceImp implements UploadService {
@@ -180,5 +181,10 @@ public class UploadServiceImp implements UploadService {
 			e.printStackTrace();
 			System.out.println("dcm2jpg ERROR");
 		}
+	}
+	@Override
+	public void delete(String path) {
+		// TODO Auto-generated method stub
+		FileUtils.delete(path);
 	}
 }

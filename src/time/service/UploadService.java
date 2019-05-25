@@ -16,4 +16,6 @@ public interface UploadService {
 
 	void dcm2jpg(String string, String string2);
 
+	void delete(String path);
+
 }

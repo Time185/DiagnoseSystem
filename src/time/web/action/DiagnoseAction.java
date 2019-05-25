@@ -22,6 +22,7 @@ import com.opensymphony.xwork2.ActionSupport;
 import time.domain.User;
 import time.service.DiagnoseService;
 import time.serviceImp.DiagnoseServiceImp;
+import time.utils.FileUtils;
 
 public class DiagnoseAction extends ActionSupport implements ServletRequestAware,ServletResponseAware{
 	
@@ -75,6 +76,9 @@ public class DiagnoseAction extends ActionSupport implements ServletRequestAware
 		// 判断后台算法是否调用成功
 		String jpgDir = getJpgDir() + user.getLoginname();
 		String resultDir = getResultDir() + user.getLoginname();
+		// 诊断之前删除上次的诊断结果的文件夹以及诊断结果的压缩包
+		FileUtils.delete(resultDir);
+		FileUtils.delete(getResultDir() + user.getLoginname() + ".zip");
 		String result = diagnose.diagnose(jpgDir, resultDir);
 		// 选出前三个概率最高的切片路径	
 		if(result != null) {
@@ -82,6 +86,8 @@ public class DiagnoseAction extends ActionSupport implements ServletRequestAware
 			String[] imagePath = diagnose.getImagePath(result);
 			
 			diagnose.producePDF(getTemplatePDF(), result, imagePath, user);
+			//将诊断结果压缩  供用户下载
+			FileUtils.fileToZip(resultDir, getResultDir(), user.getLoginname());
 		}
 		System.out.println("辅助诊断");
 		return SUCCESS;

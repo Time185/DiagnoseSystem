@@ -46,6 +46,8 @@ public class UploadServlet extends HttpServlet {
 		String unzipFile = uploadService.unzip(unzipDir + uploadName, unzipDir + uploadName.substring(0, uploadName.lastIndexOf(".")));		
 		// 对文件进行整理  将所有的dcm文件放到同一个目录下面
 		uploadService.copy(unzipDir + unzipFile, dcmDir + unzipFile);
+		//转换之前删除上次遗留的文件夹
+		uploadService.delete(inputDir + user.getLoginname());
 		// 将dcm文件转换为jpg文件
 		uploadService.dcm2jpg(dcmDir + unzipFile, inputDir + user.getLoginname());
 				
