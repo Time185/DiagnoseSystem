@@ -70,7 +70,7 @@ public class DiagnoseAction extends ActionSupport implements ServletRequestAware
 		this.image = image;
 	}	
 	
-	public String diagnose() throws DocumentException, IOException {
+	public String diagnose() throws DocumentException, IOException, InterruptedException {
 		DiagnoseService diagnose = new DiagnoseServiceImp();
 		User user = (User) request.getSession().getAttribute("user");
 		// 判断后台算法是否调用成功
@@ -79,13 +79,15 @@ public class DiagnoseAction extends ActionSupport implements ServletRequestAware
 		// 诊断之前删除上次的诊断结果的文件夹以及诊断结果的压缩包
 		FileUtils.delete(resultDir);
 		FileUtils.delete(getResultDir() + user.getLoginname() + ".zip");
+		FileUtils.delete(getResultDir() + user.getLoginname() + ".jpg");
 		String result = diagnose.diagnose(jpgDir, resultDir);
 		// 选出前三个概率最高的切片路径	
 		if(result != null) {
 			//说明算法执行结束  读取json文件
 			String[] imagePath = diagnose.getImagePath(result);
-			
-			diagnose.producePDF(getTemplatePDF(), result, imagePath, user);
+			// 将两张切片合并成一张切片
+			String pdfImage = diagnose.getpdfImage(imagePath,getResultDir(),user.getLoginname());
+			diagnose.producePDF(getTemplatePDF(), result, pdfImage, user);
 			//将诊断结果压缩  供用户下载
 			FileUtils.fileToZip(resultDir, getResultDir(), user.getLoginname());
 		}

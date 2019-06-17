@@ -12,13 +12,15 @@ import time.domain.User;
 
 public interface DiagnoseService {
 	// 产生诊断报告
-	void producePDF(String templatePdf, String result, String[] imagePath, User user);
+	void producePDF(String templatePdf, String result, String pdfImage, User user);
 
-	String diagnose(String jpgDir, String resultDir);
+	String diagnose(String jpgDir, String resultDir) throws IOException, InterruptedException;
 
 	boolean getPDF(String string, HttpServletResponse response);
 
 	String[] getImagePath(String result);
 
 	void scanDcm(String resultDir, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException;
+
+	String getpdfImage(String[] imagePath, String result, String string);
 }

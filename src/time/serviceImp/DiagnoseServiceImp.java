@@ -1,6 +1,7 @@
 package time.serviceImp;
 
 import java.awt.Color;
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -37,6 +38,7 @@ import com.itextpdf.text.pdf.PdfStamper;
 
 import time.domain.User;
 import time.service.DiagnoseService;
+import time.utils.ImageStitching;
 import time.utils.ReadJson;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONException;
@@ -46,7 +48,7 @@ import net.sf.json.JSONObject;
 public class DiagnoseServiceImp implements DiagnoseService {
 
 	@Override
-	public void producePDF(String templatePath, String result, String[] imagePath, User user) {		
+	public void producePDF(String templatePath, String result, String pdfImage, User user) {		
 		PdfReader reader;
 		FileOutputStream out;
 		ByteArrayOutputStream bos;
@@ -59,7 +61,7 @@ public class DiagnoseServiceImp implements DiagnoseService {
 			stamper = new PdfStamper(reader, bos);
 			AcroFields form = stamper.getAcroFields();
 			//form.addSubstitutionFont(BaseFont.createFont("STSong-light","UniGB-UCS2-H",BaseFont.NOT_EMBEDDED));
-			String[] str = {user.getName(),String.valueOf(user.getAge()),"20190426","正常","健康"};
+			String[] str = {user.getName(),String.valueOf(user.getAge()),"20190426","待完善","待完善"};
 			int i = 0;
 			Iterator<String> it =  form.getFields().keySet().iterator();
 			
@@ -71,7 +73,7 @@ public class DiagnoseServiceImp implements DiagnoseService {
 					float x = sign.getLeft();
 					float y = sign.getBottom();
 					// 读图片
-					Image image = Image.getInstance( result + "/"+ imagePath[0]);
+					Image image = Image.getInstance( pdfImage);
 					// 获取操作界面
 					PdfContentByte under = stamper.getOverContent(pageNo);
 					// 根据域的大小缩放图片
@@ -104,7 +106,7 @@ public class DiagnoseServiceImp implements DiagnoseService {
 	}
 	// 调用服务器算法  
 	@Override
-	public String diagnose(String jpgDir,String resultDir) {
+	public String diagnose(String jpgDir,String resultDir) throws IOException, InterruptedException {
 		// TODO Auto-generated method stub
 		File result = new File(resultDir);
 		if(!result.exists())
@@ -114,7 +116,7 @@ public class DiagnoseServiceImp implements DiagnoseService {
 		byte[] buffer = new byte[1024];
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		ByteArrayOutputStream outErr = new ByteArrayOutputStream();
-		try {
+		
 			Process proc = Runtime.getRuntime().exec(arg);
 			InputStream errStream = proc.getErrorStream();
 			InputStream stream = proc.getInputStream();
@@ -127,11 +129,7 @@ public class DiagnoseServiceImp implements DiagnoseService {
 			}
 			proc.waitFor();
 			return resultDir;
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
+		
 	}
 	@Override
 	public boolean getPDF(String string, HttpServletResponse response) {
@@ -157,7 +155,7 @@ public class DiagnoseServiceImp implements DiagnoseService {
 	@Override
 	public String[] getImagePath(String result) {
 		// TODO Auto-generated method stub
-		String[] imagePath = new String[3];
+		String[] imagePath = new String[4];
 		try {
 			String jsonArray = ReadJson.ReadFile(result + "/pred_result.json");
 			JSONArray jsonArray1=JSONArray.fromObject(jsonArraySort(jsonArray));////按value排序后的json
@@ -165,7 +163,7 @@ public class DiagnoseServiceImp implements DiagnoseService {
         		JSONObject itemcoord = jsonArray1.getJSONObject(i);
         		        		
         	}
-			for(int i = 0; i < 3 ; i++){
+			for(int i = 0; i < 4 ; i++){
         		JSONObject itemcoord = jsonArray1.getJSONObject(i);
         		System.out.println(itemcoord.get("picture")); 
         		if(itemcoord.get("picture") != null) {
@@ -258,6 +256,31 @@ public class DiagnoseServiceImp implements DiagnoseService {
 		request.setAttribute("url", urlList);
 		RequestDispatcher requestDispatcher = request.getRequestDispatcher("../diagnose/picture.jsp");
 		requestDispatcher.forward(request, response);
+		
+	}
+	@Override
+	public String getpdfImage(String[] imagePath, String result, String loginname) {
+		// TODO Auto-generated method stub
+		BufferedImage image1 = null;
+		BufferedImage image2 = null;
+		BufferedImage imageAfter1 = null;
+		BufferedImage imageAfter2 = null;
+		String savePath = result + "/" + loginname + ".jpg";
+		try {
+			image1 = ImageStitching.getBufferedImage(result + "/" + loginname + "/" + imagePath[0]);
+			image2 = ImageStitching.getBufferedImage(result + "/" + loginname + "/" + imagePath[1]);			
+			imageAfter1 = ImageStitching.mergeImage(image1, image2, false);
+			
+			image1 = ImageStitching.getBufferedImage(result + "/" + loginname + "/" + imagePath[2]);
+			image2 = ImageStitching.getBufferedImage(result + "/" + loginname + "/" + imagePath[3]);
+			imageAfter2 = ImageStitching.mergeImage(image1, image2, false);
+			
+			imageAfter1 = ImageStitching.mergeImage(imageAfter1, imageAfter2, true);
+			ImageStitching.generateSaveFile(imageAfter1, savePath);
+		}catch(IOException e) {
+			e.printStackTrace();
+		}
+		return savePath;
 		
 	}
 

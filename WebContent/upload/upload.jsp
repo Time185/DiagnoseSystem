@@ -85,7 +85,7 @@ a:hover{text-decoration:underline; color:#3EAA42;}
             <div class="item_container">                             
                <div id="" class="queueList" >
                   <div style="position:relative; font:normal 14px/24px 'MicroSoft YaHei';">
-                       <p>说明：仅支持.zip压缩文件的上传，每次上传文件个数不超过5个，文件大小不超过800M</p>                  
+                       <p>说明：仅支持.zip压缩文件的上传，文件大小不超过300M</p>                  
                   		<div id="dndArea" class="placeholder">
                         	<div id="upload" style="text-align:middle"></div>     					
      					</div>
@@ -95,9 +95,9 @@ a:hover{text-decoration:underline; color:#3EAA42;}
       	</div>  
       </div>
     <center>
-    	<button id="repalce"  name="uploadImage" class="upload-button" >点击检查文件</button>
-    	<button id="btn2"     class="upload-button" >点击上传文件</button>	
-    	<button id="diagnose" name="diagnose"  class="upload-button" style="visibility: hidden" onclick="window.location.href='diagnose.action'">进行辅助诊断</button>	
+    	<button id="repalce"  name="uploadImage" class="upload-button" >01:点击检查文件</button>
+    	<button id="btn2"     class="upload-button" >02:点击上传文件</button>	
+    	<button id="diagnose" name="diagnose"  class="upload-button" style="visibility: hidden" onclick="window.location.href='diagnose.action'">03:进行辅助诊断</button>	
     </center> 
     </td>
       </tr>
