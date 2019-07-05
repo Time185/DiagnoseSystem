@@ -4,7 +4,7 @@
 <html style="margin-top: 150px">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="refresh" content="122;url=diagnose.action"/>
+<meta http-equiv="refresh" content="10;url=diagnose.action"/>
 <title>Insert title here</title>
 <style type="text/css">
  
@@ -157,6 +157,6 @@
         <div class="sk-circle11 sk-circle"></div>
         <div class="sk-circle12 sk-circle"></div>
       </div>
-      <div align="center" style="font-size: 30px"><span>诊断中，预计剩余时间</span><input id="timer" value="120" />秒</div>
+      <div align="center" style="font-size: 30px"><span>诊断中，预计剩余时间</span><input id="timer" value="30" />秒</div>
         </body>
 </html>

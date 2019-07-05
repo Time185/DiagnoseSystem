@@ -2,6 +2,7 @@ package time.serviceImp;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -9,6 +10,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.text.Normalizer.Form;
 import java.util.ArrayList;
@@ -84,6 +86,7 @@ public class DiagnoseServiceImp implements DiagnoseService {
 				}else {
 					
 					form.setField(name, str[i++]);
+					System.out.println("添加字段");
 				}
 				
 			}
@@ -106,29 +109,37 @@ public class DiagnoseServiceImp implements DiagnoseService {
 	}
 	// 调用服务器算法  
 	@Override
-	public String diagnose(String jpgDir,String resultDir) throws IOException, InterruptedException {
+	public String diagnose(String jpgDir,String resultDir) {
 		// TODO Auto-generated method stub
 		File result = new File(resultDir);
 		if(!result.exists())
 			result.mkdirs();
-		String arg = "sudo /data/tanjiale/py-faster-rcnn/tools/demo.py"
-				 + " " + jpgDir + " " + resultDir;
-		byte[] buffer = new byte[1024];
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		ByteArrayOutputStream outErr = new ByteArrayOutputStream();
+		System.out.println("jpgDir" + jpgDir);
+		System.out.println("resultDir" + resultDir);
+		String arg = "sh /data/leichao/test.sh" + " " + jpgDir + " " + resultDir;
+ 	
 		
-			Process proc = Runtime.getRuntime().exec(arg);
-			InputStream errStream = proc.getErrorStream();
-			InputStream stream = proc.getInputStream();
-			int len = -1;
-			while((len = errStream.read(buffer))!= -1) {
-				outErr.write(buffer, 0, len);
-			}
-			while((len = stream.read(buffer))!= -1) {
-				outErr.write(buffer, 0, len);
-			}
+		BufferedReader br = null;
+		Process proc;
+		try {
+			proc = Runtime.getRuntime().exec(arg);
+			
 			proc.waitFor();
-			return resultDir;
+			br = new BufferedReader(new InputStreamReader(proc.getInputStream()));
+			String line = null;
+		    StringBuilder sb = new StringBuilder();
+	        while((line = br.readLine()) != null){
+	             sb.append(line + "\n");
+	         }
+
+	        System.out.println(sb.toString());
+			System.out.println("调用算法结束");
+				
+			}catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+			}
+		return resultDir;
 		
 	}
 	@Override

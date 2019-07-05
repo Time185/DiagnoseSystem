@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="refresh" content="122;url=diagnose.action"/>
+<meta http-equiv="refresh" content="5;url=diagnose.action"/>
 <title>Insert title here</title>
 <style type="text/css">
  
@@ -214,7 +214,7 @@ a:hover{text-decoration:underline; color:#3EAA42;}
         <div class="sk-circle11 sk-circle"></div>
         <div class="sk-circle12 sk-circle"></div>
       </div>
-      <div align="center" style="font-size: 30px"><span>诊断中，预计剩余时间</span><input id="timer" value="120" />秒</div></td>
+      <div align="center" style="font-size: 30px"><span>诊断中，预计诊断时间为  30 秒</span></div></td>
       </tr>
     </table></td>
   </tr>

@@ -93,7 +93,7 @@ public class UserAction extends ActionSupport{
 		System.out.println(loginname + "-------------");
 		UserService user =new UserServiceImp();
 		List<User> list = user.checkLoginname(loginname);
-		
+		System.out.println("检查用户名");
 		if(list.isEmpty()&&!loginname.isEmpty()) {
 		
 			response.getWriter().write("当前用户名可用");

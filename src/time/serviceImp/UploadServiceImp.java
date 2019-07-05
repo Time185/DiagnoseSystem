@@ -170,6 +170,8 @@ public class UploadServiceImp implements UploadService {
 			/*String[] arg = new String[] {"python","D:\\Program Files\\python37\\Dicom2Jpg\\demo.py",
 					dcmDir,
 					jpgDir};*/
+			System.out.println("dcmDir=" + dcmDir);
+			System.out.println("jpsDir=" + jpgDir);
 			String[] arg = new String[] {"python3","/data/leichao/diagnose/pythonCode/dcm2jpg.py",
 					dcmDir,
 					jpgDir};

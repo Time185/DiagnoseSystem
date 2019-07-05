@@ -74,8 +74,8 @@ public class DiagnoseAction extends ActionSupport implements ServletRequestAware
 		DiagnoseService diagnose = new DiagnoseServiceImp();
 		User user = (User) request.getSession().getAttribute("user");
 		// 判断后台算法是否调用成功
-		String jpgDir = getJpgDir() + user.getLoginname();
-		String resultDir = getResultDir() + user.getLoginname();
+		String jpgDir = getJpgDir() + user.getLoginname()+ "/" ;
+		String resultDir = getResultDir() + user.getLoginname()+ "/" ;
 		// 诊断之前删除上次的诊断结果的文件夹以及诊断结果的压缩包
 		FileUtils.delete(resultDir);
 		FileUtils.delete(getResultDir() + user.getLoginname() + ".zip");
