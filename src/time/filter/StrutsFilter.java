@@ -36,7 +36,7 @@ public class StrutsFilter extends StrutsPrepareAndExecuteFilter implements Filte
 		String url = httprequest.getRequestURI();
 		
 		// 如果请求的是servlet   直接转发到sevlet   不执行struts2的核心过滤器
-		if(url.contains("UploadServlet")) {
+		if(url.contains("Servlet")) {
 			
 			chain.doFilter(request, response);
 		}else {

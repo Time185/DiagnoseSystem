@@ -43,6 +43,17 @@
 	
 	 function checkname (){
 		var loginname = $("#loginname").val();
+		var parent=/^[A-Za-z]+$/;
+		if(!parent.test(loginname)){
+			if(loginname==""){
+				$("#span02").text("账号不能为空");
+			}else{
+				$("#span02").text("账号只能输入英文字母");
+			}
+			flag1 = 0
+			return false
+		}
+		else{
 		$.ajax({
 			type:"post",
 			url:"user_check.action",
@@ -61,7 +72,7 @@
 				}
 			}
 		})
-	
+		  }
 	}
 		
 	   function checkEmail(){
