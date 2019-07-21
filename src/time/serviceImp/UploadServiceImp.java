@@ -53,6 +53,7 @@ public class UploadServiceImp implements UploadService {
 			if(!item.isFormField()) {
 				BufferedInputStream in = new BufferedInputStream(item.getInputStream()); 
 				BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(new File(userDir+"/"+ uuid + item.getName())));
+				request.getSession().setAttribute("dcmDirWithUser", uuid + item.getName());
 				Streams.copy(in, out, true);
 			}
 			return uuid + item.getName();

@@ -31,13 +31,13 @@ public class StrutsFilter extends StrutsPrepareAndExecuteFilter implements Filte
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 		// TODO Auto-generated method stub
 		// place your code here
-		System.out.println("新的过滤器");
+		
 		HttpServletRequest httprequest = (HttpServletRequest) request;
 		String url = httprequest.getRequestURI();
 		
 		// 如果请求的是servlet   直接转发到sevlet   不执行struts2的核心过滤器
 		if(url.contains("UploadServlet")) {
-			System.out.println(url);
+			
 			chain.doFilter(request, response);
 		}else {
 			// 请求的为action   交给核心处理器来处理

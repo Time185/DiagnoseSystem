@@ -48,6 +48,10 @@
 		</action>
 		<action name="pictureTransport" class="time.web.action.DiagnoseAction" method="pictureTransport">		
 		</action>
+		<action name="label" class="time.web.action.LabelAction" method="zhenduan">	
+			<param name="filezhenduan">/data/leichao/diagnose/label/</param>
+			<param name="dcmDir">/data/leichao/diagnose/dcmDir/</param>
+		</action>
 	</package>
 	
 </struts>
